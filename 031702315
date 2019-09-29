@@ -1,0 +1,104 @@
+
+
+#include<iostream>
+#include<cctype>
+#include<cstdio>
+#include<cstdlib>
+#include<fstream>
+#include<string>
+
+
+
+using namespace std;
+
+class Address 
+{
+public:
+	string total;//
+	string provience; //省、直辖市
+	string name;//姓名
+	string number;//电话号码
+	string city; //市
+	string district; //区、县
+	string street; //街道、镇、乡
+};
+int main()
+{
+	Address addr[50];
+	ifstream inFile;
+	string temp;
+	inFile.open("E:\\Software\Project2\a.txt", ios::in);
+	if (!inFile)
+	{
+		cout << "error a.";
+		cout << endl;
+	}
+	else
+		cout << "open a." << endl;
+	ofstream outFile("b.txt", ios::out);
+	if (!outFile) 
+	{
+		inFile.close();
+		cout << "error a" << endl;
+		return 0;
+	}
+	else
+	{
+		cout << "open b." << endl;
+	}
+		
+	int i = 0;
+	while (getline(inFile, temp)) 
+	{
+		addr[i].total = temp;
+		i++;
+	}
+	string flag;
+	string nam, num;
+	int j, x, y;
+	for (j = 0; j < i; j++)
+	{
+		flag = addr[j].total;
+		x = flag.find(",");
+		nam = flag.substr(0, x);//复制逗号之前的名字
+		flag.erase(0, x + 1);//删除字符串中的名字和逗号
+		addr[j].name = nam;//将名字存入类
+		x = 0;
+		y = flag.find("1");
+		num = flag.substr(y, 11);//复制电话号码
+		flag.erase(y, 11);//删除电话号码
+		addr[j].number = num;
+		y = 0;
+		//one = flag.find("省");
+		//nam = flag.substr(0, one);
+		//flag.erase(0, one + 2);
+		//addr[j].pro = nam;
+		//two = 0;
+		string provin[40] = {"北京","天津","重庆","上海","河南","河北","山东","山西","黑龙江","吉林","辽宁","浙江","江苏","安徽","江西","湖南","湖北","新疆","云南","贵州","福建","宁夏","西藏","四川","内蒙古","广西","海南","青海","甘肃","陕西","广东" };
+
+		for (int k = 0; k < 23; k++) 
+		{
+			x = -5;
+			x = flag.find(provin[k]);
+			if (x >= 0) 
+			{
+				addr[j].provience = provin[k];
+				cout << addr[j].provience<< endl;
+			}
+			if (x >= 0) {
+				break;
+			}
+		}
+	}
+
+	for (j = 0; j < i; j++) 
+	{
+		outFile << "姓名：" << addr[j].name << ",手机：" << addr[j].number <<",省份：" << addr[j].provience<<endl;
+	}
+
+	inFile.close();
+	outFile.close();
+	return 0;
+}
+
+
